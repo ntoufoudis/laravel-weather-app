@@ -15,6 +15,7 @@
     <body class="font-sans antialiased bg-[#37474F] min-h-screen flex align-middle items-center justify-center">
         <div class="w-full max-w-4xl bg-[#232931] text-white rounded-3xl">
             <div class="grid grid-cols-5">
+                @if($data['error'] == null)
                 <div class="col-span-2 bg-gradient-to-br from-[#3F4A79] to-[#193869] rounded-3xl">
                     <div class="text-center p-6">
                         <h2 class="text-5xl font-bold mb-6">{{ now()->format('l') }}</h2>
@@ -79,6 +80,9 @@
                         </ul>
                     </div>
                 </div>
+                @else
+                <h1>{{ $data['error'] }}</h1>
+                @endif
             </div>
         </div>
     </body>
