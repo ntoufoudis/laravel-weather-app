@@ -1,66 +1,84 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laravel Weather Application
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A simple weather application built with Laravel 11 that utilizes the [OpenWeatherMap API](https://openweathermap.org) to provide real-time weather information.
+The application uses [One Call API 3.0](https://openweathermap.org/api/one-call-3), so you need to subscribe for this service in order to get a working API Key. 
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Demo 
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+You can see the app [here](https://weather.ntoufoudis.com)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## Features
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+* **Current Weather:** Get the current weather conditions for a specific location.
+* **Forecast: Retrieve** a 4-day weather forecast for a specific location.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## ToDo
 
-## Laravel Sponsors
+* Add Option To Select Temperature (Celsius **°C**, Fahrenheit **°F**, Kelvin **K**)
+* Add Option To Select Imperial or Metric for speed (miles/hour or meter/sec)
+* Add Option To Select Language
+* Add Option To Show Weather Overview for today's and tomorrow's forecast.
+* Add Option To Show aggregated weather data for a particular date from 2nd January 1979 till 1,5 years ahead.
+* Add Option To Show Information for any timestamp between 1st January 1979 till 4 days ahead.
+* Add Option To Select Number of Days (0-7) For Forecast.
+* Add Custom Error Page.
+* 
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Installation
 
-### Premium Partners
+1. Clone repository:
+```angular2html
+git clone https://github.com/ntoufoudis/laravel-weather-app.git
+```
+2. Navigate to the project directory:
+```angular2html
+cd laravel-weather-app
+```
+3. Create .env file
+```angular2html
+cp .env.example .env
+```
+4. Add OpenWeather API Key:
+```angular2html
+OPENWEATHERMAP_API_KEY=Your API KEY
+```
+5. Install dependencies:
+```angular2html
+composer install
+npm install
+```
+6. Run migrations
+```angular2html
+php artisan migrate
+```
+7. Serve application
+```angular2html
+npm run dev
+php artisan serve
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+---
+
+## Usage
+
+Navigate to home page. Enter the city name in the form of "City" or "City, Country Code (e.g. London, UK)".
+Click "Search to see current conditions and 4 days forecast."
+
+---
 
 ## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Contributions are welcome. Feel free to open an issue or submit a pull request.
 
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+The application is licensed under the [MIT License(MIT)](LICENSE)
