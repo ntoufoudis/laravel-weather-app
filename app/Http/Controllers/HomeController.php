@@ -6,23 +6,22 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Stevebauman\Location\Facades\Location;
 
-
 class HomeController extends Controller
 {
     public function getData($city)
     {
         $coordinates = $this->getCoordinates($city);
         if ($coordinates[0]['error'] == null) {
-            $lat = $coordinates[0]['lat'];
-            $lon = $coordinates[0]['lon'];
 
             $data = [];
 
-            $url = 'https://api.openweathermap.org/data/3.0/onecall?lat=' . $lat . '&lon=' . $lon . '&appid=' . $this->apiKey();
+            $url = 'https://api.openweathermap.org/data/3.0/onecall?lat=' . $coordinates[0]['lat'] . '&lon=' . $coordinates[0]['lon'] . '&appid=' . $this->apiKey();
 
             $response = Http::get($url);
 
-            if ($response->successful()) {
+            $data[0]['error'] = $this->checkResponseCode($response);
+
+            if ($data[0]['error'] == null) {
                 $data['temp'] = $this->kelvinToCelsius($response['current']['temp']);
                 $data['humidity'] = $response['current']['humidity'];
                 $data['wind'] = $response['current']['wind_speed'];
@@ -35,17 +34,14 @@ class HomeController extends Controller
                 $data['iconUrl'] = 'https://openweathermap.org/img/w/' . $data['icon'] . '.png';
                 $data['city'] = $coordinates[0]['name'];
 
-                $data['days'] = [1, 2, 3, 4]; // Indices for the next 4 days
-
-                for ($i = 0; $i < 4; $i++) {
-                    $data['day' . $i . 'Temp'] = $this->kelvinToCelsius($response['daily'][$data['days'][$i]]['temp']['day']);
-                    $data['icon' . $i] = $response['daily'][$data['days'][$i]]['weather'][0]['icon'];
+                for ($i = 1; $i < 5; $i++) {
+                    $data['day' . $i . 'Temp'] = $this->kelvinToCelsius($response['daily'][$i]['temp']['day']);
+                    $data['icon' . $i] = $response['daily'][$i]['weather'][0]['icon'];
                     $data['icon' . $i . 'Url'] = 'https://openweathermap.org/img/w/' . $data['icon' . $i] . '.png';
                 }
             }
             $data['error'] = '';
-        }
-        else {
+        } else {
             $data['error'] = $coordinates[0]['error'];
         }
 
@@ -53,14 +49,9 @@ class HomeController extends Controller
 
     }
 
-
-    private function apiKey(){
-        return config('app.openweathermap_api_key');
-    }
-
-    private function kelvinToCelsius($temperature): float
+    private function apiKey()
     {
-        return round(($temperature - 273.15));
+        return config('app.openweathermap_api_key');
     }
 
     private function getCoordinates($city = null)
@@ -70,12 +61,16 @@ class HomeController extends Controller
         $url = 'https://api.openweathermap.org/geo/1.0/direct?q=' . $city . '&limit=1&appid=' . $this->apiKey();
 
         $response = Http::get($url);
-        if ($response->successful()) {
+
+        $coordinates[0]['error'] = $this->checkResponseCode($response);
+
+        if ($coordinates[0]['error'] == null) {
             if ($response->json() != null) {
-                $coordinates = $response->json();
-                $coordinates[0]['error'] = '';
-            }
-            else {
+                $coordinates[0]['name'] = $response->json()[0]['name'];
+                $coordinates[0]['country'] = $response->json()[0]['country'];
+                $coordinates[0]['lat'] = $response->json()[0]['lat'];
+                $coordinates[0]['lon'] = $response->json()[0]['lon'];
+            } else {
                 $coordinates[0]['error'] = 'City not found';
             }
         }
@@ -83,23 +78,63 @@ class HomeController extends Controller
         return $coordinates;
     }
 
-    public function index()
+    private function checkResponseCode($response)
+    {
+        $statusCode = '';
+
+        if ($response->status() == 400) {
+            $statusCode = 'Bad Request';
+        } elseif ($response->status() == 401) {
+            $statusCode = 'Unauthorized';
+        } elseif ($response->status() == 404) {
+            $statusCode = 'Not Found';
+        } elseif ($response->status() == 429) {
+            $statusCode = 'Too Many Requests';
+        } elseif ($response->status() == 500) {
+            $statusCode = 'Internal Server Error';
+        }
+
+        return $statusCode;
+    }
+
+    private function kelvinToCelsius($temperature): float
+    {
+        return round(($temperature - 273.15));
+    }
+
+    private function getCurrentCity()
     {
         $position = Location::get();
-        $city = $position->cityName;
+        return $position->cityName;
+    }
 
-        return view('home', [
-            'data' => $this->getData($city),
-        ]);
+    public function index()
+    {
+        $data = $this->getData($this->getCurrentCity());
+
+        if ($data['error'] == null) {
+            return view('home', [
+                'data' => $data,
+            ]);
+        } else {
+            return view('error', [
+                'code' => $data['error'],
+            ]);
+        }
     }
 
     public function search(Request $request)
     {
-        $city = $request->input('city');
+        $data = $this->getData($request->input('city'));
 
-        return view('home', [
-            'data' => $this->getData($city),
-        ]);
+        if ($data['error'] == null) {
+            return view('home', [
+                'data' => $data,
+            ]);
+        } else {
+            return view('error', [
+                'code' => $data['error'],
+            ]);
+        }
     }
-
 }
