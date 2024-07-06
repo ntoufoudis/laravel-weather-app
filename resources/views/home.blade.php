@@ -11,6 +11,18 @@
         <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet"/>
 
         @vite(['resources/js/app.js', 'resources/css/app.css'])
+
+
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-EXMWK5FD3P"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-EXMWK5FD3P');
+        </script>
+
     </head>
     <body class="font-sans antialiased bg-[#37474F] min-h-screen flex align-middle items-center justify-center">
         <div class="w-full max-w-4xl bg-[#232931] text-white rounded-3xl">
